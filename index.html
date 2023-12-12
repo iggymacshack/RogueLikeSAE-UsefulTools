@@ -3,10 +3,73 @@
   <head>
     <link rel="stylesheet" href="style.css" />
     <title>UsefulTools/Iguess</title>
+    <script type="text/javascript">
+      var damageSourceCount = 0;
+      function addDamageSourceForm() {
+        var div = document.getElementById("damageSources");
+        if (damageSourceCount < 5) {
+          damageSourceCount += 1;
+          div.innerHTML += `<div id="${damageSourceCount}"><span>Stat : </span><select><option value="ATK">Attack</option><option value="HP">Health</option><option value="CRT">Critical hit</option><option value="DDG">Dodge</option><option value="SPD">Speed</option></select><span>Multiplier : </span><input type="number" min="0" max="10" step="0.1" /><button onclick="removeDamageSource(${damageSourceCount});">Remove</button></div>`;
+        }
+      }
+
+      function removeDamageSource(counter) {
+        var children = document
+          .getElementById("damageSources")
+          .getElementsByTagName("div");
+        for (var childDiv of children) {
+          if (childDiv.id == counter) {
+            childDiv.remove();
+            damageSourceCount -= 1;
+          }
+        }
+      }
+    </script>
   </head>
   <body>
     <div class="topBar">
       <h3>UsefulTools</h3>
+    </div>
+    <div>
+      <h1>AbilityBuilder</h1>
+      <div class="toolWindow">
+        <h3>Basics</h3>
+        <div><span>Name : </span><input type="text" id="abilityName" /></div>
+        <div class="column">
+          <span>Flavor text : </span
+          ><textarea rows="10" id="abilityFlavor"></textarea>
+        </div>
+        <div>
+          <span>Number of targets : </span
+          ><input type="number" max="5" min="1" id="abilityTarget" />
+        </div>
+        <div>
+          <span>Type of weapon : </span>
+          <select id="abilityWeapon">
+            <option value="unarmed">Unarmed</option>
+            <option value="melee">Melee</option>
+            <option value="ranged">Ranged</option>
+            <option value="projectile">Projectile</option>
+          </select>
+        </div>
+        <div>
+          <span>Buffed by weak spots : </span
+          ><input type="checkbox" id="abilityWeakspot" />
+        </div>
+        <div>
+          <span>Damage split : </span
+          ><input type="checkbox" id="abilitySplit" />
+        </div>
+        <div>
+          <h3>Damage</h3>
+          <button onclick="addDamageSourceForm();">New damage source</button>
+          <div id="damageSources"></div>
+        </div>
+      </div>
+      <div class="column">
+        <span>Result : </span>
+        <textarea rows="10" name="result"></textarea>
+      </div>
     </div>
   </body>
 </html>
