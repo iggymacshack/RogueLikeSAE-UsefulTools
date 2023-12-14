@@ -4,25 +4,8 @@
     <link rel="stylesheet" href="style.css" />
     <title>UsefulTools/Iguess</title>
     <script type="text/javascript">
-      var damageSourceCount = 0;
-      function addDamageSourceForm() {
-        var div = document.getElementById("damageSources");
-        if (damageSourceCount < 5) {
-          damageSourceCount += 1;
-          div.innerHTML += `<div id="${damageSourceCount}"><span>Stat : </span><select><option value="ATK">Attack</option><option value="HP">Health</option><option value="CRT">Critical hit</option><option value="DDG">Dodge</option><option value="SPD">Speed</option></select><span>Multiplier : </span><input type="number" min="0" max="10" step="0.1" /><button onclick="removeDamageSource(${damageSourceCount});">Remove</button></div>`;
-        }
-      }
-
-      function removeDamageSource(counter) {
-        var children = document
-          .getElementById("damageSources")
-          .getElementsByTagName("div");
-        for (var childDiv of children) {
-          if (childDiv.id == counter) {
-            childDiv.remove();
-            damageSourceCount -= 1;
-          }
-        }
+      function setInputValue(id, value) {
+        document.getElementById(id).value = value;
       }
     </script>
   </head>
@@ -62,8 +45,81 @@
         </div>
         <div>
           <h3>Damage</h3>
-          <button onclick="addDamageSourceForm();">New damage source</button>
-          <div id="damageSources"></div>
+          <div class="column">
+            <div class="row small-space">
+              <span>Attack Modifier</span>
+              <input
+                id="atkInput"
+                type="number"
+                min="0"
+                max="10"
+                step="0.05"
+                value="0"
+              />
+              <button onclick="setInputValue('atkInput',0)">Min</button>
+              <button onclick="setInputValue('atkInput',10)">Max</button>
+            </div>
+            <div class="row small-space">
+              <span>Health Modifier</span>
+              <input
+                id="hpInput"
+                type="number"
+                min="0"
+                max="10"
+                step="0.05"
+                value="0"
+              />
+              <button onclick="setInputValue('hpInput',0)">Min</button>
+              <button onclick="setInputValue('hpInput',10)">Max</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3>Status effects</h3>
+          <div class="column">
+            <h4>
+              Stun status<input
+                id="stunStatusCheck"
+                type="checkbox"
+                value="false"
+              />
+            </h4>
+            <div id="stunStatusParam" class="row small-space hidden">
+              <span>Duration</span>
+              <input
+                id="stunDuration"
+                type="number"
+                min="0"
+                max="10"
+                step="1"
+                value="1"
+              />
+              <button onclick="setInputValue('stunDuration',0)">Min</button>
+              <button onclick="setInputValue('stunDuration',10)">Max</button>
+            </div>
+          </div>
+          <div class="column">
+            <h4>
+              Weak Point status<input
+                id="wpStatusCheck"
+                type="checkbox"
+                value="false"
+              />
+            </h4>
+            <div id="wpStatusParam" class="row small-space hidden">
+              <span>Duration</span>
+              <input
+                id="wpDuration"
+                type="number"
+                min="0"
+                max="10"
+                step="1"
+                value="1"
+              />
+              <button onclick="setInputValue('wpDuration',0)">Min</button>
+              <button onclick="setInputValue('wpDuration',10)">Max</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="column">
@@ -72,4 +128,25 @@
       </div>
     </div>
   </body>
+  <script type="text/javascript">
+    document
+      .getElementById("stunStatusCheck")
+      .addEventListener("change", (event) => {
+        if (event.target.checked) {
+          document.getElementById("stunStatusParam").style.display = "flex";
+        } else {
+          document.getElementById("stunStatusParam").style.display = "none";
+        }
+      });
+
+    document
+      .getElementById("wpStatusCheck")
+      .addEventListener("change", (event) => {
+        if (event.target.checked) {
+          document.getElementById("wpStatusParam").style.display = "flex";
+        } else {
+          document.getElementById("wpStatusParam").style.display = "none";
+        }
+      });
+  </script>
 </html>

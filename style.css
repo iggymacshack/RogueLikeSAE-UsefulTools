@@ -33,3 +33,11 @@ body {
   display: flex;
   flex-direction: row;
 }
+
+.small-space {
+  column-gap: 10px;
+}
+
+.hidden {
+  display: none;
+}
