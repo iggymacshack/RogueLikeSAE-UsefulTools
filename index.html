@@ -7,6 +7,53 @@
       function setInputValue(id, value) {
         document.getElementById(id).value = value;
       }
+
+      function getData() {
+        var name = document.getElementById("abilityName").value;
+        var flavor = document.getElementById("abilityFlavor").value;
+        var targetNumber = document.getElementById("abilityTarget").value;
+        var type = document.getElementById("abilityWeapon").value;
+        var weakPoint = document.getElementById("abilityWeakspot").checked;
+        var split = document.getElementById("abilitySplit").checked;
+        var base = document.getElementById("baseInput").value;
+        var atkModifier = document.getElementById("atkInput").value;
+        var hpModifier = document.getElementById("hpInput").value;
+        var stunTrue = document.getElementById("stunStatusCheck").checked;
+        var stunDuration = document.getElementById("stunDuration").value;
+        var weakTrue = document.getElementById("wpStatusCheck").checked;
+        var wpDuration = document.getElementById("wpDuration").value;
+        var burnTrue = document.getElementById("burnStatusCheck").checked;
+        var burnDamage = document.getElementById("burnDamage").value;
+        var burnDuration = document.getElementById("burnDuration").value;
+        var final = {
+          general: {
+            name: name,
+            flavorText: flavor,
+            weaponType: type,
+            targetNumber: parseInt(targetNumber),
+            weakPointCheck: weakPoint,
+            damageSplit: split,
+          },
+          damage: {
+            base: parseInt(base),
+            attackModifier: parseInt(atkModifier),
+            hpModifier: parseInt(hpModifier),
+          },
+          status: {
+            stun: { valid: stunTrue, stunDuration: parseInt(stunDuration) },
+            weakPoint: {
+              valid: weakTrue,
+              weakpointDuration: parseInt(wpDuration),
+            },
+            burn: {
+              valid: burnTrue,
+              burnDuration: parseInt(burnDuration),
+              burnDamage: parseInt(burnDamage),
+            },
+          },
+        };
+        document.getElementById("resultBox").innerHTML = JSON.stringify(final);
+      }
     </script>
   </head>
   <body>
@@ -46,6 +93,17 @@
         <div>
           <h3>Damage</h3>
           <div class="column">
+            <div class="row small-space">
+              <span>Base attack damage</span>
+              <input
+                id="baseInput"
+                type="number"
+                min="0"
+                max="1000"
+                step="1"
+                value="0"
+              />
+            </div>
             <div class="row small-space">
               <span>Attack Modifier</span>
               <input
@@ -92,7 +150,7 @@
                 min="0"
                 max="10"
                 step="1"
-                value="1"
+                value="0"
               />
               <button onclick="setInputValue('stunDuration',0)">Min</button>
               <button onclick="setInputValue('stunDuration',10)">Max</button>
@@ -114,17 +172,53 @@
                 min="0"
                 max="10"
                 step="1"
-                value="1"
+                value="0"
               />
               <button onclick="setInputValue('wpDuration',0)">Min</button>
               <button onclick="setInputValue('wpDuration',10)">Max</button>
             </div>
           </div>
+          <div class="column">
+            <h4>
+              Burn status<input
+                id="burnStatusCheck"
+                type="checkbox"
+                value="false"
+              />
+            </h4>
+            <div id="burnStatusParam" class="column small-space hidden">
+              <div>
+                <span>Duration</span>
+                <input
+                  id="burnDuration"
+                  type="number"
+                  min="0"
+                  max="10"
+                  step="1"
+                  value="0"
+                />
+                <button onclick="setInputValue('burnDuration',0)">Min</button>
+                <button onclick="setInputValue('burnDuration',10)">Max</button>
+              </div>
+              <div>
+                <span>Burn base damage</span>
+                <input
+                  id="burnDamage"
+                  type="number"
+                  min="0"
+                  max="1000"
+                  step="1"
+                  value="1"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <button onclick="getData();">Validate</button>
       <div class="column">
         <span>Result : </span>
-        <textarea rows="10" name="result"></textarea>
+        <textarea rows="10" id="resultBox" name="result"></textarea>
       </div>
     </div>
   </body>
@@ -146,6 +240,16 @@
           document.getElementById("wpStatusParam").style.display = "flex";
         } else {
           document.getElementById("wpStatusParam").style.display = "none";
+        }
+      });
+
+    document
+      .getElementById("burnStatusCheck")
+      .addEventListener("change", (event) => {
+        if (event.target.checked) {
+          document.getElementById("burnStatusParam").style.display = "flex";
+        } else {
+          document.getElementById("burnStatusParam").style.display = "none";
         }
       });
   </script>
